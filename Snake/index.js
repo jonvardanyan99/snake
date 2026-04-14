@@ -7,13 +7,9 @@ const INITIAL_SNAKE = [
     y: 10 * BOX,
   },
 ];
-const PAUSE_GAME_TEXT = 'Pause Game';
-const RESUME_GAME_TEXT = 'Resume Game';
 
 const gameCvs = document.getElementById('game');
 const gameCtx = gameCvs.getContext('2d');
-const pauseWrapper = document.getElementById('pause-wrapper');
-const pauseBtn = document.getElementById('pause-btn');
 const playAgainBtn = document.getElementById('play-again-btn');
 
 const groundImg = new Image();
@@ -43,6 +39,7 @@ let food = {
   x: 0,
   y: 0,
 };
+let isGamePaused = false;
 
 const getFoodCoordinates = () => {
   return {
@@ -74,20 +71,14 @@ const detectCollision = (head, snake) => {
 };
 
 const toggleGamePause = () => {
-  if (!playAgainBtn.classList.contains('play-again-btn--active')) {
-    if (pauseBtn.textContent === PAUSE_GAME_TEXT) {
-      clearInterval(snakeGame);
+  if (isGamePaused) {
+    snakeGame = setInterval(draw, 100);
 
-      pauseBtn.textContent = RESUME_GAME_TEXT;
+    isGamePaused = false;
+  } else {
+    clearInterval(snakeGame);
 
-      pauseBtn.classList.add('pause-btn--paused');
-    } else {
-      snakeGame = setInterval(draw, 100);
-
-      pauseBtn.textContent = PAUSE_GAME_TEXT;
-
-      pauseBtn.classList.remove('pause-btn--paused');
-    }
+    isGamePaused = true;
   }
 };
 
@@ -99,7 +90,7 @@ const handleKeyDown = (event) => {
       toggleGamePause();
     }
 
-    if (pauseBtn.textContent === PAUSE_GAME_TEXT) {
+    if (!isGamePaused) {
       if (key === 'ArrowLeft' && direction !== 'right') {
         left.play();
 
@@ -127,12 +118,9 @@ const playGameAgain = () => {
     direction = '';
     snake = [...INITIAL_SNAKE];
     food = getInitialFoodCoordinates();
-
-    pauseBtn.textContent = PAUSE_GAME_TEXT;
-    pauseBtn.classList.remove('pause-btn--paused');
+    isGamePaused = false;
 
     playAgainBtn.classList.remove('play-again-btn--active');
-    pauseWrapper.classList.remove('pause-wrapper--hidden');
 
     snakeGame = setInterval(draw, 100);
   }
@@ -186,18 +174,21 @@ const draw = () => {
     dead.play();
 
     playAgainBtn.classList.add('play-again-btn--active');
-    pauseWrapper.classList.add('pause-wrapper--hidden');
   }
 
   snake.unshift(newHead);
 
   gameCtx.fillStyle = 'white';
-  gameCtx.font = '45px Arial';
+  gameCtx.textAlign = 'left';
+  gameCtx.font = '45px Arial, sans-serif';
   gameCtx.fillText(score, 2 * BOX, 1.6 * BOX);
+
+  gameCtx.textAlign = 'right';
+  gameCtx.font = '16px Arial, sans-serif';
+  gameCtx.fillText('Press ESC to pause', gameCvs.width - BOX, 1.3 * BOX);
 };
 
 addEventListener('keydown', handleKeyDown);
-pauseBtn.addEventListener('click', toggleGamePause);
 playAgainBtn.addEventListener('click', playGameAgain);
 
 let snakeGame = setInterval(draw, 100);
