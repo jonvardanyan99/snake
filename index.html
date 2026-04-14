@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Snake Game</title>
-    <link rel="stylesheet" href="css/Style.css">
-    <link rel="icon" href="images/Icon.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake game</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="icon" href="assets/images/snake.png">
 </head>
 <body>
-    <canvas id="snake" width="608" height="608"></canvas>
-    <script src="javascript/Snake.js"></script>
+  <div class="snake-game">
+    <div id="pause-wrapper" class="pause-wrapper">
+      <button id="pause-btn" class="pause-btn">Pause Game</button>
+      <p class="pause-text">Or press <span class="pause-key">ESC</span> to pause</p>
+    </div>
+    <div class="container">
+      <canvas id="game" class="game" width="608px" height="608px"></canvas>
+      <button id="play-again-btn" class="play-again-btn">Play Again</button>
+    </div>
+  </div>
+  <script src="Snake/index.js"></script>
 </body>
 </html>
